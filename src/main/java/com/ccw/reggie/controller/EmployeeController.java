@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -70,5 +71,28 @@ public class EmployeeController {
         // 清空session中的用户Id
         request.getSession().removeAttribute("employee");
         return R.success("退出成功！");
+    }
+
+    /**
+     * 新增员工
+     * @param employee
+     * @return
+     */
+    @PostMapping
+    public R<String> save(HttpServletRequest request, @RequestBody Employee employee){
+        log.info("新增员工 信息为：{}", employee.toString());
+
+        // 设置初始密码 并进行加密
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        // 设置时间
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        // 设置用户
+        employee.setCreateUser((Long) request.getSession().getAttribute("employee"));
+        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
+
+        employeeService.save(employee);
+
+        return R.success("新增用户成功！");
     }
 }
