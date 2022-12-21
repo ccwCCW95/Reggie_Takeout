@@ -84,11 +84,11 @@ public class EmployeeController {
         // 设置初始密码 并进行加密
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         // 设置时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         // 设置用户
-        employee.setCreateUser((Long) request.getSession().getAttribute("employee"));
-        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
+//        employee.setCreateUser((Long) request.getSession().getAttribute("employee"));
+//        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
 
         employeeService.save(employee);
 
@@ -129,8 +129,11 @@ public class EmployeeController {
      */
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee){
-        employee.setUpdateUser((Long)request.getSession().getAttribute("employee"));
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser((Long)request.getSession().getAttribute("employee"));
+//        employee.setUpdateTime(LocalDateTime.now());
+
+        Long id = Thread.currentThread().getId();
+        log.info("当前线程id为：{}", id);
 
         employeeService.updateById(employee);
 
